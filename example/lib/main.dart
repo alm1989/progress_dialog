@@ -4,7 +4,7 @@ import 'package:progress_dialog/progress_dialog.dart';
 
 //import '../../lib/progress_dialog.dart';
 
-ProgressDialog pr;
+ProgressDialog? pr;
 
 void main() {
   runApp(MaterialApp(
@@ -12,7 +12,12 @@ void main() {
   ));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   double percentage = 0.0;
 
   @override
@@ -33,7 +38,7 @@ class MyApp extends StatelessWidget {
 //      ),
     );
 
-    pr.style(
+    pr?.style(
 //      message: 'Downloading file...',
       message:
           'Lets dump some huge text into the progress dialog and check whether it can handle the huge text. If it works then not you or me, flutter is awesome',
@@ -52,20 +57,23 @@ class MyApp extends StatelessWidget {
 
     return Scaffold(
       body: Center(
-        child: RaisedButton(
+        child: ElevatedButton(
+
             child: Text(
               'Show Dialog',
               style: TextStyle(color: Colors.white),
             ),
-            color: Colors.blue,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue,
+            ),
             onPressed: () async {
-              await pr.show();
+              await pr?.show();
 
-              Future.delayed(Duration(seconds: 2)).then((onvalue) {
+              Future.delayed(Duration(seconds: 2)).then((value) {
                 percentage = percentage + 30.0;
                 print(percentage);
 
-                pr.update(
+                pr?.update(
                   progress: percentage,
                   message: "Please wait...",
                   progressWidget: Container(
@@ -84,17 +92,17 @@ class MyApp extends StatelessWidget {
 
                 Future.delayed(Duration(seconds: 2)).then((value) {
                   percentage = percentage + 30.0;
-                  pr.update(
+                  pr?.update(
                       progress: percentage, message: "Few more seconds...");
                   print(percentage);
                   Future.delayed(Duration(seconds: 2)).then((value) {
                     percentage = percentage + 30.0;
-                    pr.update(progress: percentage, message: "Almost done...");
+                    pr?.update(progress: percentage, message: "Almost done...");
                     print(percentage);
 
                     Future.delayed(Duration(seconds: 2)).then((value) {
-                      pr.hide().whenComplete(() {
-                        print(pr.isShowing());
+                      pr?.hide().whenComplete(() {
+                        print(pr?.isShowing());
                       });
                       percentage = 0.0;
                     });
@@ -103,12 +111,12 @@ class MyApp extends StatelessWidget {
               });
 
               Future.delayed(Duration(seconds: 10)).then((onValue) {
-                print("PR status  ${pr.isShowing()}");
-                if (pr.isShowing())
-                  pr.hide().then((isHidden) {
+                print("PR status  ${pr?.isShowing()}");
+                if (onValue != null && pr!= null && pr!.isShowing())
+                  pr?.hide().then((isHidden) {
                     print(isHidden);
                   });
-                print("PR status  ${pr.isShowing()}");
+                print("PR status  ${pr?.isShowing()}");
               });
             }),
       ),
@@ -122,7 +130,7 @@ class FirstScreen extends StatefulWidget {
 }
 
 class _FirstScreenState extends State<FirstScreen> {
-  ProgressDialog pr;
+  late ProgressDialog pr;
 
   @override
   Widget build(BuildContext context) {
@@ -131,10 +139,12 @@ class _FirstScreenState extends State<FirstScreen> {
 
     return Scaffold(
       body: Center(
-        child: RaisedButton(
+        child: ElevatedButton(
           child: Text('Show dialog and go to next screen',
               style: TextStyle(color: Colors.white)),
-          color: Colors.blueAccent,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.blueAccent,
+          ),
           onPressed: () {
             pr.show();
             Future.delayed(Duration(seconds: 3)).then((value) {
